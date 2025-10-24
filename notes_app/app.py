@@ -1,15 +1,29 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, redirect, url_for
+import os
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+
+DB_FILE_PATH = os.path.join(os.path.dirname(__file__), 'notes.sqlite')
+
+app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DB_FILE_PATH}"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+db = SQLAlchemy(app)
+
+class Note(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+
+    def __repr__(self):
+        return f"<Note {self.id}: {self.title}>"
 
 @app.route('/')
 def home():
     role = "admin"
-    notes = [
-        {"id": 1, "title": "Nota 1", "content": "Contenido de la nota 1"},
-        {"id": 2, "title": "Nota 2", "content": "Contenido de la nota 2"},
-        {"id": 3, "title": "Nota 3", "content": "Contenido de la nota 3"},
-    ]
+    
+    notes = Note.query.all()
     return render_template('home.html', role=role, notes=notes)
 
 @app.route('/acerca-de')
@@ -31,6 +45,31 @@ def api_info():
         "description": "API para la aplicación de notas"
     }
     return jsonify(data), 200
+
+@app.route('/confirmacion', methods=['GET', 'POST'])
+def confirmation():
+    print(request)
+    return "Prueba de confirmación"
+
+@app.route('/crear-nota', methods=['GET', 'POST'])
+def create_note():
+    if request.method == 'POST':
+        title = request.form.get('title-note', 'Sin título')
+        content = request.form.get('content-note', 'Sin contenido')
+        
+        note_db = Note(
+            title=title,
+            content=content
+        )
+        
+        db.session.add(note_db)
+        db.session.commit()
+        
+        print(f"Nota creada: {title} - {content}")
+        return redirect(
+            url_for('confirmation', title=title, content=content)
+        )
+    return render_template('note_form.html')
 
 # if __name__ == '__main__':
 #     app.run(debug=True) # Debug mode ON

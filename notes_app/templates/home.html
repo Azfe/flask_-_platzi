@@ -14,12 +14,24 @@
         <button>Solicitar eliminación</button>
     {% endif %}
 
+    <hr>
+
     <ul>
         {% for note in notes %}
-            <li><h2>{{ note.title }}</h2></li>
+            <li>
+                <h2>{{ note.title }}</h2>
                 <p>{{ note.content }}</p>
+            </li>
+            {% else %}
+            <h3>Aun no se han creado notas.</h3>
         {% endfor %}
     </ul>    
+
+    <!-- <a href="{{ url_for('create_note') }}">Agregar una nueva nota</a> -->
+
+    <button type="button" onclick="window.location.href='{{ url_for('create_note') }}'">
+        Agregar una nueva nota
+    </button>
     
 </body>
 </html>
