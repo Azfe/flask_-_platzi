@@ -19,8 +19,14 @@
     <ul>
         {% for note in notes %}
             <li>
-                <h2>{{ note.title }}</h2>
-                <p>{{ note.content }}</p>
+                <h3>{{ note.title }} </h3>
+                <p>
+                    {{ note.content }} |
+                    <a href="{{ url_for('edit_note', id=note.id) }}">
+                        ✏ Editar Nota
+                    </a>
+                </p>
+                
             </li>
             {% else %}
             <h3>Aun no se han creado notas.</h3>

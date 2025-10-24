@@ -9,10 +9,10 @@
     <h1>Crear una nueva nota</h1>
     <form action="" method="POST">
         <!-- <label for="nota">Nota</label> -->
-        <input type="text" name="title-note" id="title-note" placeholder="Título"><br>
-        <input type="text" name="content-note" id="content-note" placeholder="Contenido de la nota"><br>
+        <input type="text" name="title-note" id="title-note" placeholder="Título" value="{{ note.title }}"><br>
+        <input type="text" name="content-note" id="content-note" placeholder="Contenido de la nota" value="{{ note.content }}"><br>
 
-        <input type="submit" value="Crear Nota">
+        <input type="submit" value="Guardar Nota">
     </form>
 </body>
 </html>
