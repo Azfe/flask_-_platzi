@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de creación de nota</title>
+</head>
+<body>
+    <h1>¡Nota creada exitosamente!</h1>
+    <p><strong>Título:</strong> {{ title }}</p>
+    <p><strong>Contenido:</strong> {{ content }}</p>
+    <p>Serás redirigido a la página de inicio en 3 segundos...</p>
+
+    <script>
+        setTimeout(function() {
+            window.location.href = "{{ url_for('home') }}";
+        }, 3000);
+    </script>
+</body>
+</html>

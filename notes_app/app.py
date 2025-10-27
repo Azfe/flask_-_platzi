@@ -20,6 +20,7 @@ class Note(db.Model):
         return f"<Note {self.id}: {self.title}>"
 
 @app.route('/')
+# @app.route('/home')
 def home():
     role = "admin"
     
@@ -49,13 +50,16 @@ def api_info():
 @app.route('/confirmacion', methods=['GET', 'POST'])
 def confirmation():
     print(request)
-    return "Prueba de confirmación"
+    # return "Prueba de confirmación"
+    title = request.args.get('title')
+    content = request.args.get('content')
+    return render_template('confirmation.html', title=title, content=content)
 
 @app.route('/crear-nota', methods=['GET', 'POST'])
 def create_note():
     if request.method == 'POST':
-        title = request.form.get('title-note', 'Sin título')
-        content = request.form.get('content-note', 'Sin contenido')
+        title = request.form.get('title-note')
+        content = request.form.get('content-note')
         
         note_db = Note(
             title=title,
@@ -86,6 +90,13 @@ def edit_note(id):
         return redirect(url_for('home'))        
     return render_template('edit_note.html', note=note)
 
+@app.route('/eliminar-nota/<int:id>', methods=['POST'])
+def delete_note(id):
+    note = Note.query.get_or_404(id)
+    if request.method == 'POST':
+        db.session.delete(note)
+        db.session.commit()
+        return redirect(url_for('home')) # esto genera un 302
+
 # if __name__ == '__main__':
 #     app.run(debug=True) # Debug mode ON
-
