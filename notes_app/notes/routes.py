@@ -2,7 +2,8 @@ from flask import(
     redirect, 
     render_template, 
     request, url_for,
-    Blueprint
+    Blueprint,
+    flash
 )
 from models import Note, db
 
@@ -33,14 +34,14 @@ def create_note():
         note_db = Note(
             title=title,
             content=content
-        )
-        
+        )        
         db.session.add(note_db)
         db.session.commit()
-        
+        flash("Nota creada exitosamente.", "success")        
         print(f"Nota creada: {title} - {content}")
         return redirect(
-            url_for('notes.confirmation', title=title, content=content)
+            url_for('notes.home')
+            # url_for('notes.confirmation', title=title, content=content)
         )
     return render_template('note_form.html')
 

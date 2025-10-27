@@ -7,13 +7,13 @@
 </head>
 <body>
     <h1>¡Nota creada exitosamente!</h1>
-    <p><strong>Título:</strong> {{ title }}</p>
-    <p><strong>Contenido:</strong> {{ content }}</p>
+    <p><strong>Título:</strong> {{ title | default('Sin título', true) }}</p>
+    <p><strong>Contenido:</strong> {{ content | e }}</p>
     <p>Serás redirigido a la página de inicio en 3 segundos...</p>
 
     <script>
         setTimeout(function() {
-            window.location.href = "{{ url_for('home') }}";
+            window.location.href = "{{ url_for('notes.home') }}";
         }, 3000);
     </script>
 </body>
